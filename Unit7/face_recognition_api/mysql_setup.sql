@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS face_db;
+
+USE face_db;
+
+CREATE TABLE IF NOT EXISTS registered_faces (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    encoding LONGTEXT NOT NULL
+);

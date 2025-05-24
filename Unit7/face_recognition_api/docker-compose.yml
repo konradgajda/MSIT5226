@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: face_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: mypass
+      DB_NAME: face_db
+
+  mysql:
+    image: mysql:8
+    container_name: mysql_face
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypass
+      MYSQL_DATABASE: face_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql_setup.sql:/docker-entrypoint-initdb.d/mysql_setup.sql:ro
+volumes:
+  mysql_data:
