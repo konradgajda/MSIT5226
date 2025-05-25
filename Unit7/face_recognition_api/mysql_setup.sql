@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS registered_faces (
     name VARCHAR(255) NOT NULL,
     encoding LONGTEXT NOT NULL
 );
+
