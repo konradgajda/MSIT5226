@@ -1,0 +1,9 @@
+<div>
+<h2>Recognize Face</h2>
+<div>
+  <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"></webcam>  
+</div>
+<div>
+  <p>{{ message }}</p>    
+</div>
+</div>
