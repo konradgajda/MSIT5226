@@ -1,0 +1,16 @@
+<div class="container">
+<h2>Register Face Wizard</h2>
+<div>
+  <input class [(ngModel)]="name" placeholder="Enter your name" />  
+</div>
+<div>
+  <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"></webcam>  
+</div>
+<div>
+  <button (click)="startWizard()">Start Registration</button>  
+</div>
+
+<p>{{ message }}</p>
+
+<progress [value]="currentStep * imagesPerStep + collected" [max]="directions.length * imagesPerStep"></progress>
+</div>
