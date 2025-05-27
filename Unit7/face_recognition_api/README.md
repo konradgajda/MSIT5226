@@ -1,4 +1,4 @@
-# Face Recognition API (Docker + FastAPI + MySQL)
+# Face Recognition API (Docker + Angular + FastAPI + MySQL)
 
 ## Endpoints
 - `POST /register` → Register face with `{ name, image (base64) }`
