@@ -15,6 +15,8 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql_face
+    ports:
+     - "43306:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mypass

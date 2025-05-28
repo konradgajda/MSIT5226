@@ -76,18 +76,17 @@ async def register_face(data: FaceRegister):
     if encoding is None:
         raise HTTPException(status_code=400, detail="No face detected")
 
-    # Load all known encodings
-    known_names, known_encodings = await asyncio.to_thread(load_known_faces)
-    distances = face_recognition.face_distance(known_encodings, encoding)
-    duplicate_index = np.argmin(distances) if len(distances) > 0 else None
+    # Get encodings for this specific person
+    person_encodings = await asyncio.to_thread(load_encodings_for_person, data.name)
 
-    if duplicate_index is not None and distances[duplicate_index] <= 0.5:
-        matched_name = known_names[duplicate_index]
-        raise HTTPException(status_code=400, detail=f"This face is already registered as '{matched_name}'.")
+    if len(person_encodings) >= 25:
+        raise HTTPException(status_code=400, detail="Maximum 25 face encodings per person reached")
 
+    # Save new encoding
     await asyncio.to_thread(save_encoding_to_db, data.name, encoding)
 
-    return {"message": f"Face registered for {data.name}"}
+    return {"message": f"Face image registered for {data.name} ({len(person_encodings) + 1}/25)"}
+
 
 
 @app.post("/recognize")
@@ -151,6 +150,15 @@ def load_known_faces():
         encodings.append(json.loads(enc_str))
     conn.close()
     return names, encodings
+
+def load_encodings_for_person(name):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT encoding FROM registered_faces WHERE name = %s", (name,))
+    encodings = [json.loads(enc_str) for (enc_str,) in cursor.fetchall()]
+    conn.close()
+    return encodings
+
 
 # ---------------------- UNIT TEST HOOK ----------------------
 if __name__ == "__main__":
